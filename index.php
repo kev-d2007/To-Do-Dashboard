@@ -9,5 +9,6 @@
     <?php
         include 'menu.php';
     ?>
+    <main id="content"></main>
 </body>
 </html>
