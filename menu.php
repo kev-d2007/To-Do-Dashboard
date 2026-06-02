@@ -6,6 +6,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <script>
+        function get_page(page) {
+            <?php
+            $page = $_GET['page'] ?? 'dashboard.php';
+            include_once $page;
+            ?>
+            console.log(page + " is aan het laden...");
+        }
+    </script>
+
+    <div class="sidebar">
+
+        
+    <img src="img/logo.png" alt="Logo" class="logo" id="main-logo">
+    <button class="menu-btn active" onclick="get_page('dashboard.php')"> Dashboard</button>
+
+    <button class="menu-btn" onclick="get_page('stats.php')">Statistieken</button>
+
+    <button class="menu-btn" onclick="get_page('settings.php')">Instellingen</button>
+
+    <a class="category-title">Categorieën</a>
+
+    <button class="menu-btn" onclick="get_page('logout.php')">Uitloggen</button>
+
+    </div>
+    
 
 <aside class="sidebar">
     <img src="img/logo.png" alt="Logo" class="logo">
