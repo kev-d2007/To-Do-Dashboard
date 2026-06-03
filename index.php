@@ -12,7 +12,7 @@
         include 'functions.php';
         confirm_logged_in();
         if  (logged_in()) {
-            include 'menu.php';
+            require_once 'menu.php';
         }
     ?>
     <main id="content"></main>

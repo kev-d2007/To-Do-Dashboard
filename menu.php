@@ -1,3 +1,4 @@
+<?php include 'functions.php'; confirm_logged_in(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,19 +11,20 @@
     <aside class="sidebar">
         
     <img src="img/logo.png" alt="Logo" class="logo" id="main-logo">
-    <button type="button" class="menu-btn" onclick="loadPage('dashboard.php', this)">
+    <h4>Welkom terug, <?= htmlspecialchars($_SESSION['username'] ?? '') ?>!</h4>
+    <button type="button" class="menu-btn active" onclick="loadPage('dashboard.php', this)">
     <i class="fa-solid fa-table-columns"></i> Dashboard </button>
 
-    <button type="button" class="menu-btn active" onclick="loadPage('stats.php', this)">
+    <button type="button" class="menu-btn" onclick="loadPage('stats.php', this)">
     <i class="fa-solid fa-chart-simple"></i> Statistieken</button>
 
     <button type="button" class="menu-btn" onclick="loadPage('settings.php', this)">
     <i class="fa-solid fa-gear"></i> Instellingen</button>
 
-    <a class="category-title">SECTIES</a>
+    <a class="category-title">Categorieën</a>
 
     
-    <button type="button" class="menu-btn logout-btn" onclick="loadPage('logout.php', this)">
+    <button type="button" class="menu-btn logout-btn" onclick="logout()">
     <i class="fa-solid fa-right-from-bracket"></i> Uitloggen</button>
 
     </aside>
@@ -57,8 +59,7 @@ function loadPage(page, button) {
 }
 function logout() {
     if (confirm("Weet je zeker dat je wilt uitloggen?")) {
-        window.location.href = "login.php";
-        session_destroy();
+        window.location.href = "logout.php";
     }
 }
 </script>
