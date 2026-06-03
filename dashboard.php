@@ -74,9 +74,9 @@
                     <span>Voltooid</span>
                 </div>
 
-                <div class="open-box">
+                <div class="aangemaakt-box">
                     <span class="number">3</span>
-                    <span>Open</span>
+                    <span>Aangemaakt</span>
                 </div>
 
             </div>

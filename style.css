@@ -17,8 +17,6 @@ body{
     color:#2c3e50;
 }
 
-/* INPUT */
-
 .task-input{
     display:flex;
     gap:10px;
@@ -54,8 +52,6 @@ body{
     background:#357bd8;
 }
 
-/* GRID */
-
 .dashboard-grid{
     display:flex;
     gap:20px;
@@ -71,8 +67,6 @@ body{
     width:400px;
     flex:none;
 }
-
-/* TASK CARDS */
 
 .task-card{
     background:white;
@@ -102,8 +96,6 @@ body{
     border-left:5px solid #eab308;
 }
 
-/* BADGES */
-
 .badge{
     width:25px;
     height:25px;
@@ -125,8 +117,6 @@ body{
     background:#eab308;
 }
 
-/* STATS CARD */
-
 .stats-card{
     background:white;
     border-radius:12px;
@@ -146,7 +136,7 @@ body{
 }
 
 .completed-box,
-.open-box{
+.aangemaakt-box{
     flex:1;
     color:white;
     border-radius:8px;
@@ -159,7 +149,7 @@ body{
     background:#4caf50;
 }
 
-.open-box{
+.aangemaakt-box{
     background:#c97924;
 }
 
@@ -186,8 +176,6 @@ body{
     color:#7d8a99;
     font-weight:bold;
 }
-
-/* WEEK CARD */
 
 .week-card{
     background:white;
@@ -241,16 +229,12 @@ body{
     color:#4caf50;
 }
 
-/* LINKS */
-
 .all-tasks-link{
     display:block;
     margin-top:10px;
     color:#4a90e2;
     font-size:13px;
 }
-
-/* ARROW BUTTON */
 
 .show-more-btn{
     width:38px;
@@ -267,8 +251,6 @@ body{
     font-size:20px;
     color:#6b7280;
 }
-
-/* SIDEBAR */
 
 .sidebar{
     width:250px;

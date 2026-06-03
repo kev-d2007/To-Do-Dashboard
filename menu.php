@@ -11,7 +11,7 @@
     <aside class="sidebar">
         
     <img src="img/logo.png" alt="Logo" class="logo" id="main-logo">
-    <h4>Welkom terug, <?= htmlspecialchars($_SESSION['username'] ?? '') ?>!</h4>
+    <h4 style="color: #f2f2f2;">Welkom terug, <span style="color: #ffe66d;"><?= htmlspecialchars($_SESSION['username'] ?? '') ?></span>!</h4>
     <button type="button" class="menu-btn active" onclick="loadPage('dashboard.php', this)">
     <i class="fa-solid fa-table-columns"></i> Dashboard </button>
 
