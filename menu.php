@@ -17,7 +17,7 @@
 
     <a class="category-title">Categorieën</a>
 
-    <button type="button" class="menu-btn" onclick="loadPage('logout.php')">Uitloggen</button>
+    <button type="button" class="menu-btn" onclick="logout()">Uitloggen</button>
 
     </div>
 
@@ -42,6 +42,12 @@ function loadPage(page) {
             console.error(error);
         });
     console.log("Laad pagina: " + page);
+}
+function logout() {
+    if (confirm("Weet je zeker dat je wilt uitloggen?")) {
+        window.location.href = "login.php";
+        session_destroy();
+    }
 }
 </script>
 
