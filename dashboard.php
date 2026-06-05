@@ -1,55 +1,66 @@
+<?php include 'functions.php'; include 'database.php'; confirm_logged_in(); ?>
 <h1>Mijn taken</h1>
 
 <div class="task-input">
     <input type="text" placeholder="Voeg een nieuwe taak toe...">
+    <select name="landen" id="priority-select">
+        <option value="laag" style="background-color: hsl(62, 85%, 51%);">Laag</option>
+        <option value="gemiddeld" style="background-color: hsl(31, 80%, 53%);">Gemiddeld</option>
+        <option value="hoog" style="background-color: hsl(0, 50%, 50%);">Hoog</option>
+    </select>
     <button>Taak toevoegen</button>
 </div>
 
-<h3>ONVOLTOOIDE TAKEN</h3>
+<script>
+    (function(){
+        const sel = document.getElementById('priority-select');
+        if (!sel) return;
+        function applyColor(){
+            const opt = sel.options[sel.selectedIndex];
+            const color = opt.style.backgroundColor || window.getComputedStyle(opt).backgroundColor;
+            sel.style.backgroundColor = color || '';
+        }
+        sel.addEventListener('change', applyColor);
+        applyColor();
+    })();
+</script>
+
+<h2>Onvoltooide taken</h2>
 
 <div class="dashboard-grid">
 
-    <!-- LEFT SIDE -->
     <div class="left-panel">
-
-        <div class="task-card priority-high">
-            <input type="checkbox">
-            <span>Rapport afmaken voor deadline</span>
-            <div class="badge">1</div>
-        </div>
-
-        <div class="task-card priority-high">
-            <input type="checkbox">
-            <span>Klantgesprek voorbereiden</span>
-            <div class="badge">1</div>
-        </div>
-
-        <div class="task-card priority-medium">
-            <input type="checkbox">
-            <span>Vergadering voorbereiden</span>
-            <div class="badge orange">2</div>
-        </div>
-
-        <div class="task-card priority-medium">
-            <input type="checkbox">
-            <span>Presentatie volgende week</span>
-            <div class="badge orange">2</div>
-        </div>
-
-        <div class="task-card priority-low">
-            <input type="checkbox">
-            <span>Offerte opstellen</span>
-            <div class="badge yellow">3</div>
-        </div>
+        <?php
+        if (isset($_SESSION['user_id'])) {
+            $user_id = (int) $_SESSION['user_id'];
+            $stmt = $conn->prepare("SELECT id, titel, afgerond, prioriteit FROM taken WHERE user_id = ? ORDER BY prioriteit ASC, id DESC LIMIT 5");
+            if ($stmt) {
+                $stmt->bind_param('i', $user_id);
+                $stmt->execute();
+                $res = $stmt->get_result();
+                while ($row = $res->fetch_assoc()) {
+                    $prio = (int) $row['prioriteit'];
+                    $class = $prio === 1 ? 'priority-high' : ($prio === 2 ? 'priority-medium' : 'priority-low');
+                    $checked = $row['afgerond'] ? 'checked' : '';
+                    echo '<div class="task-card '.htmlspecialchars($class).'">';
+                    echo '<input type="checkbox" '.($checked).' />';
+                    echo '<span>'.htmlspecialchars($row['titel']).'</span>';
+                    echo '<div class="badge '.htmlspecialchars($class).'">'.htmlspecialchars($prio).'</div>';
+                    echo '</div>';
+                }
+                $stmt->close();
+            } else {
+                echo '<p>Kon taken niet laden.</p>';
+            }
+        } else {
+            echo '<p>Geen gebruiker ingelogd.</p>';
+        }
+        ?>
 
         <a href="#" class="all-tasks-link">alle taken</a>
-        <div class="show-more-btn">
-         ↓
-        </div>
 
     </div>
 
-    <!-- RIGHT SIDE -->
     <div class="right-panel">
 
         <div class="stats-card">
@@ -63,9 +74,9 @@
                     <span>Voltooid</span>
                 </div>
 
-                <div class="open-box">
+                <div class="aangemaakt-box">
                     <span class="number">3</span>
-                    <span>Open</span>
+                    <span>Aangemaakt</span>
                 </div>
 
             </div>
@@ -92,16 +103,16 @@
                 <div>Zo</div>
             </div>
 
-               <div class="week-legend">
-               <span>⬜ Weinig</span>
-               <span>🟩 Veel</span>
+            <div class="week-legend">
+            <span>⬜ Weinig</span>
+            <span>🟩 Veel</span>
 
-               </div>
+            </div>
 
-           <div class="week-footer">
-           <span>Gemiddeld voltooid</span>
-           <strong>82%</strong>
-           </div>
+        <div class="week-footer">
+        <span>Gemiddeld voltooid</span>
+        <strong>82%</strong>
+        </div>
 
         </div>
 

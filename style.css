@@ -17,8 +17,6 @@ body{
     color:#2c3e50;
 }
 
-/* INPUT */
-
 .task-input{
     display:flex;
     gap:10px;
@@ -54,8 +52,6 @@ body{
     background:#357bd8;
 }
 
-/* GRID */
-
 .dashboard-grid{
     display:flex;
     gap:20px;
@@ -71,8 +67,6 @@ body{
     width:400px;
     flex:none;
 }
-
-/* TASK CARDS */
 
 .task-card{
     background:white;
@@ -90,19 +84,29 @@ body{
     font-weight:600;
 }
 
-.priority-high{
+.task-card.priority-high{
     border-left:5px solid #e74c3c;
 }
 
-.priority-medium{
+.badge.priority-high{
+    background-color:#e74c3c;
+}
+
+.task-card.priority-medium{
     border-left:5px solid #f97316;
 }
 
-.priority-low{
+.badge.priority-medium{
+    background-color:#f97316;
+}
+
+.task-card.priority-low{
     border-left:5px solid #eab308;
 }
 
-/* BADGES */
+.badge.priority-low{
+    background-color:#eab308;
+}
 
 .badge{
     width:25px;
@@ -125,8 +129,6 @@ body{
     background:#eab308;
 }
 
-/* STATS CARD */
-
 .stats-card{
     background:white;
     border-radius:12px;
@@ -146,7 +148,7 @@ body{
 }
 
 .completed-box,
-.open-box{
+.aangemaakt-box{
     flex:1;
     color:white;
     border-radius:8px;
@@ -159,7 +161,7 @@ body{
     background:#4caf50;
 }
 
-.open-box{
+.aangemaakt-box{
     background:#c97924;
 }
 
@@ -186,8 +188,6 @@ body{
     color:#7d8a99;
     font-weight:bold;
 }
-
-/* WEEK CARD */
 
 .week-card{
     background:white;
@@ -241,16 +241,12 @@ body{
     color:#4caf50;
 }
 
-/* LINKS */
-
 .all-tasks-link{
     display:block;
     margin-top:10px;
     color:#4a90e2;
     font-size:13px;
 }
-
-/* ARROW BUTTON */
 
 .show-more-btn{
     width:38px;
@@ -268,8 +264,11 @@ body{
     color:#6b7280;
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2ad16a9f49471c21830247050cea7c887912649d
 .sidebar{
     width:250px;
     min-height:100vh;
