@@ -2,13 +2,15 @@
 <h1>Mijn taken</h1>
 
 <div class="task-input">
-    <input type="text" placeholder="Voeg een nieuwe taak toe...">
-    <select name="landen" id="priority-select">
-        <option value="laag" style="background-color: hsl(62, 85%, 51%);">Laag</option>
-        <option value="gemiddeld" style="background-color: hsl(31, 80%, 53%);">Gemiddeld</option>
-        <option value="hoog" style="background-color: hsl(0, 50%, 50%);">Hoog</option>
-    </select>
-    <button>Taak toevoegen</button>
+    <form method="POST" action="toevoegen.php">
+        <input type="text" id="task-input" name="taak" placeholder="Voeg een nieuwe taak toe...">
+        <select name="prioriteit" id="priority-select">
+            <option value="3" style="background-color: hsl(62, 85%, 51%);">Laag</option>
+            <option value="2" style="background-color: hsl(31, 80%, 53%);">Gemiddeld</option>
+            <option value="1" style="background-color: hsl(0, 50%, 50%);">Hoog</option>
+        </select>
+        <button type="submit">Taak toevoegen</button>
+    </form>
 </div>
 
 <script>

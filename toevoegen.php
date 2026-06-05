@@ -1,12 +1,23 @@
 <?php
     include 'database.php';
+    include 'functions.php';
+    confirm_logged_in();
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $task = $_POST['taak'];
-        $sql = "INSERT INTO info VALUES ('$task')";
-        if (mysqli_query($conn, $sql)) {
-            echo "Nieuwe taak toegevoegd!";
+        $priority = $_POST['prioriteit'];
+        $user_id = (int) $_SESSION['user_id'];
+        $stmt = $conn->prepare("INSERT INTO taken (titel, prioriteit, user_id) VALUES (?, ?, ?)");
+        if ($stmt) {
+            $stmt->bind_param('sii', $task, $priority, $user_id);
+            if ($stmt->execute()) {
+                header('Location: index.php');
+                exit;
+            } else {
+                echo 'DB fout: ' . htmlspecialchars($stmt->error);
+            }
+            $stmt->close();
         } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            echo 'DB fout: ' . htmlspecialchars($conn->error);
         }
     }
 ?>
