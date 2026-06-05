@@ -84,16 +84,28 @@ body{
     font-weight:600;
 }
 
-.priority-high{
+.task-card.priority-high{
     border-left:5px solid #e74c3c;
 }
 
-.priority-medium{
+.badge.priority-high{
+    background-color:#e74c3c;
+}
+
+.task-card.priority-medium{
     border-left:5px solid #f97316;
 }
 
-.priority-low{
+.badge.priority-medium{
+    background-color:#f97316;
+}
+
+.task-card.priority-low{
     border-left:5px solid #eab308;
+}
+
+.badge.priority-low{
+    background-color:#eab308;
 }
 
 .badge{

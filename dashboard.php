@@ -45,7 +45,7 @@
                     echo '<div class="task-card '.htmlspecialchars($class).'">';
                     echo '<input type="checkbox" '.($checked).' />';
                     echo '<span>'.htmlspecialchars($row['titel']).'</span>';
-                    echo '<div class="badge">'.htmlspecialchars($prio).'</div>';
+                    echo '<div class="badge '.htmlspecialchars($class).'">'.htmlspecialchars($prio).'</div>';
                     echo '</div>';
                 }
                 $stmt->close();
