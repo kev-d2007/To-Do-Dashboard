@@ -427,3 +427,106 @@ body{
 .day-circle{
     text-align:center;
 }
+
+/* LOGIN PAGE */
+
+body:has(.login-container){
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#eef3f8;
+}
+
+.achtergrond{
+    width:100%;
+    padding-top:38px;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#eef3f8;
+}
+
+.achtergrond > img{
+    display:none;
+}
+
+.login-container{
+    width:360px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    margin:auto;
+}
+
+.logo_login_boven{
+    display:none;
+}
+
+.logo_login_container{
+    width:42px;
+    display:inline-block;
+    vertical-align:middle;
+    margin-right:8px;
+}
+
+.login-container h2:first-of-type{
+    display:inline-block;
+    font-size:16px;
+    color:#2c3e50;
+    margin:0;
+    vertical-align:middle;
+}
+
+.login-container h2:nth-of-type(2){
+    font-size:13px;
+    font-weight:normal;
+    color:#7d8a99;
+    margin:8px 0 22px;
+}
+
+.login-container h4{
+    font-size:13px;
+    color:#2c3e50;
+    margin:12px 0 6px;
+}
+
+.login-container input{
+    width:100%;
+    padding:12px;
+    border:1px solid #d6dde6;
+    border-radius:7px;
+    box-sizing:border-box;
+}
+
+.login-container button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:7px;
+    background:#4a90e2;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:15px;
+}
+
+.login-container button:hover{
+    background:#357bd8;
+}
+
+body:has(.login-container)::before{
+    content:"✅  To-Do Dashboard";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:38px;
+    background:#163856;
+    color:white;
+    display:flex;
+    align-items:center;
+    padding-left:18px;
+    font-weight:bold;
+    box-sizing:border-box;
+}
