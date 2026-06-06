@@ -10,7 +10,9 @@
 <body>
     <aside class="sidebar">
         
-    <img src="img/logo.png" alt="Logo" class="logo" id="main-logo">
+    <div class="logo-box">
+    <img src="img/logo.png" alt="Logo" id="main-logo">
+    </div>
     <button type="button" class="menu-btn" onclick="loadPage('dashboard.php', this)">
     <i class="fa-solid fa-table-columns"></i> Dashboard </button>
 
