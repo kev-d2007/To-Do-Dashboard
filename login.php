@@ -1,5 +1,5 @@
 <?php
-require_once 'functions.php';
+require_once 'database.php';
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $identifier = isset($_POST['username']) ? trim($_POST['username']) : '';
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     session_regenerate_id(true);
                     $_SESSION['user_id'] = $id;
                     $_SESSION['username'] = $gebruiker;
-                    header('Location: index.php');
+                    header('Location: menu.php');
                     exit;
                 } else {
                     $error = 'Ongeldige gegevens.';
@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-container">
             <img src="img/logo.png" alt="Logo" class="logo_login_container">
             <h2>Welkom bij het To-Do Dashboard</h2>
-            <h2>Log in om verder te gaan</h2>
             <?php if ($error !== ''): ?>
                 <div class="error-box"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>

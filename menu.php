@@ -65,5 +65,17 @@ function logout() {
 }
 </script>
 
+<script>
+document.addEventListener('change', function(e){
+    if(e.target.id === 'dark-theme'){
+        document.body.classList.add('dark-mode');
+    }
+
+    if(e.target.id === 'light-theme'){
+        document.body.classList.remove('dark-mode');
+    }
+});
+</script>
+
 </body>
 </html>

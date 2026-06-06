@@ -1,5 +1,5 @@
 <?php
-//require_once 'database.php';
+require_once 'database.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -11,14 +11,13 @@ if (!function_exists('logged_in')) {
     }
 }
 
+
 if (!function_exists('confirm_logged_in')) {
     function confirm_logged_in() {
-        if (!logged_in()) {
-            header("Location: login.php");
-            exit;
-        }
-    }
+    // tijdelijk uitgeschakeld zodat je direct naar menu.php kan
+    return true;
 }
+    }
 
 if (!function_exists('login')) {
     function login($user_id) {

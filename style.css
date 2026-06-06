@@ -530,3 +530,111 @@ body:has(.login-container)::before{
     font-weight:bold;
     box-sizing:border-box;
 }
+
+.settings-grid{
+    display:flex;
+    gap:20px;
+    margin-top:20px;
+}
+
+.settings-card{
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+.settings-card h4{
+    color:#9ca3af;
+    margin-top:0;
+}
+
+.settings-right{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    width:350px;
+}
+
+.setting-row{
+    margin:20px 0;
+}
+
+.profile-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:15px;
+}
+
+.avatar{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#4a90e2;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:22px;
+}
+
+.profile-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#e5e7eb;
+    cursor:pointer;
+}
+
+.delete-btn{
+    background:#fee2e2;
+    color:#dc2626;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.save-btn{
+    margin-top:20px;
+    padding:15px 30px;
+    background:#27811f;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.dark-mode{
+    background:#1e293b;
+    color:white;
+}
+
+.dark-mode #content{
+    background:#1e293b;
+}
+
+.dark-mode .settings-card{
+    background:#334155;
+    color:white;
+}
+
+.dark-mode .profile-btn{
+    background:#475569;
+    color:white;
+}
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4{
+    color:white;
+}
+
+.dark-mode h1{
+    color:white !important;
+}
