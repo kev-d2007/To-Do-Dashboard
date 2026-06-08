@@ -25,8 +25,13 @@
     <a class="category-title">Categorieën</a>
 
     
-    <button type="button" class="menu-btn logout-btn" onclick="logout()">
-    <i class="fa-solid fa-right-from-bracket"></i> Uitloggen</button>
+    <div class="logout-section">
+    <button class="menu-btn" onclick="get_page('logout.php')">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Afmelden
+    </button>
+    </div>
+    
 
     </aside>
 

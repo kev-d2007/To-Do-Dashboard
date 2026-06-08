@@ -149,7 +149,7 @@ body{
 
 .stats-card h4{
     margin-top:0;
-    color:#7d8a99;
+    color:black;
 }
 
 .stats-row{
@@ -276,10 +276,11 @@ body{
 }
 
 .sidebar{
-    width:250px;
-    min-height:100vh;
-    padding:10px;
-    background:darkslategray;
+width:250px;
+min-height:100vh;
+padding:10px;
+background:darkslategray;
+position:relative;
 }
 
 .logo-box{
@@ -426,6 +427,10 @@ body{
 
 .day-circle{
     text-align:center;
+}
+.day-circle strong{
+    display:block;
+    margin-top:15px;
 }
 
 /* LOGIN PAGE */
@@ -637,4 +642,59 @@ body:has(.login-container)::before{
 
 .dark-mode h1{
     color:white !important;
+}
+
+.dark-mode .setting-row a{
+    color:#60a5fa;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.dark-mode .setting-row a:hover{
+    color:#93c5fd;
+}
+
+.dark-mode .setting-row a:visited{
+    color:#60a5fa;
+}
+
+.dark-mode .stats-card,
+.dark-mode .week-card{
+    background:#334155;
+    color:white;
+}
+
+.dark-mode .stats-card h4,
+.dark-mode .week-card h4,
+.dark-mode .stats-card p,
+.dark-mode .week-footer{
+    color:white;
+}
+
+.dark-mode .all-tasks-link{
+    color:#60a5fa;
+}
+.dark-mode .task-card{
+    background:#334155;
+    color:white;
+}
+
+.dark-mode .percent-card,
+.dark-mode .weekly-stats{
+    background:#334155;
+    color:white;
+}
+
+.dark-mode .percent-card h2,
+.dark-mode .percent-card p,
+.dark-mode .day-circle strong,
+.dark-mode .day-circle p{
+    color:white;
+}
+
+.logout-section{
+    position:absolute;
+    bottom:20px;
+    left:0;
+    width:100%;
 }
