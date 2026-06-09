@@ -25,39 +25,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wachtwoord resetten</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="achtergrond">
-        <img src="img/achtergrond_inlogscherm.png" alt="Logo" class="achtergrond">
-        <img src="img/logo.png" alt="Logo" class="logo_reset_boven">
+
+        <div class="reset-page">
+            <div class="top-header">
+            <img src="img/logo.png" alt="Logo">
+            <h2>To-Do Dashboard</h2>
+        </div>
+
         <div class="reset-container">
+
             <?php if ($message !== ''): ?>
-                <div id="notice" style="padding:10px;margin-bottom:10px;border-radius:4px;<?php echo (isset($result) && $result===true) ? 'background:#e6ffed;color:#064a1f;border:1px solid #8ee0a6;' : 'background:#ffe6e6;color:#5a1a1a;border:1px solid #f0a6a6;'; ?>">
+                <div class="notice <?php echo (isset($result) && $result === true) ? 'success' : 'error'; ?>">
                     <?php echo htmlspecialchars($message); ?>
                 </div>
+
                 <?php if (isset($result) && $result === true): ?>
-                    <script>setTimeout(function(){ window.location.href='login.php'; }, 3000);</script>
+                    <script>
+                        setTimeout(function(){
+                            window.location.href = 'login.php';
+                        }, 3000);
+                    </script>
                 <?php endif; ?>
             <?php endif; ?>
 
             <form action="ww_reset.php" method="post">
-                <img src="img/logo.png" alt="Logo" class="logo_reset_container">
-                <h2>Wachtwoord resetten</h2>
-                <h4>Vul je gebruikersnaam en e-mailadres in om je wachtwoord te veranderen</h4>
-                <h4>Gebruikersnaam:</h4>
+
+                <div class="reset-title">
+                    <img src="img/logo.png" alt="Logo" class="logo_reset_container">
+                    <h2>Wachtwoord resetten</h2>
+                </div>
+
+                <p class="reset-subtitle">
+                    Vul je gegevens in om je wachtwoord te veranderen.
+                </p>
+
+                <label>Gebruikersnaam</label>
                 <input type="text" name="username" placeholder="Gebruikersnaam" required>
-                <h4>E-mailadres:</h4>
+
+                <label>E-mailadres</label>
                 <input type="email" name="email" placeholder="E-mailadres" required>
-                <h4>Nieuw wachtwoord:</h4>
-                <input type="password" name="new_password" placeholder="Nieuw wachtwoord (min. 8 tekens)" required>
-                <button type="submit" onclick="return confirm('Weet je zeker dat je je wachtwoord wilt resetten?')">Reset Wachtwoord</button>
+
+                <label>Nieuw wachtwoord</label>
+                <input type="password" name="new_password" placeholder="Minimaal 8 tekens" required>
+
+                <button type="submit" onclick="return confirm('Weet je zeker dat je je wachtwoord wilt resetten?')">
+                    Reset wachtwoord
+                </button>
+
+                <a href="login.php" class="back-login">Terug naar inloggen</a>
+
             </form>
+
         </div>
+
     </div>
+
 </body>
 </html>
