@@ -37,7 +37,7 @@
         <?php
         if (isset($_SESSION['user_id'])) {
             $user_id = (int) $_SESSION['user_id'];
-            $stmt = $conn->prepare("SELECT id, titel, afgerond, prioriteit FROM taken WHERE user_id = ? ORDER BY prioriteit ASC, id DESC LIMIT 5");
+            $stmt = $conn->prepare("SELECT id, titel, afgerond, prioriteit FROM taken WHERE user_id = ? AND afgerond = 0 ORDER BY prioriteit ASC, id DESC LIMIT 5");
             if ($stmt) {
                 $stmt->bind_param('i', $user_id);
                 $stmt->execute();
@@ -74,12 +74,12 @@
             <div class="stats-row">
 
                 <div class="completed-box">
-                    <span class="number">7</span>
+                    <span class="number"><?php echo htmlspecialchars($counts['onvoltooid'] ?? 0); ?></span>
                     <span>Voltooid</span>
                 </div>
 
                 <div class="aangemaakt-box">
-                    <span class="number">3</span>
+                    <span class="number"><?php echo htmlspecialchars($counts['aangemaakt'] ?? 0); ?></span>
                     <span>Aangemaakt</span>
                 </div>
 

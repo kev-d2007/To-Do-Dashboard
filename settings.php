@@ -48,6 +48,7 @@ if (isset($_SESSION['user_id'])) {
 
         <div class="setting-row delete-account">
             <h3>Account verwijderen</h3>
+            <h5>Niet werkend, want het is niet nodig.</h5>
             <button class="delete-btn">Verwijderen</button>
         </div>
     </div>
@@ -76,18 +77,38 @@ if (isset($_SESSION['user_id'])) {
         <div class="settings-card">
             <h4>ACTIVITEIT</h4>
 
-            <p>Taken aangemaakt <strong>222</strong></p>
-            <p>Taken voltooid <strong>172</strong></p>
-            <p>Lid sinds <strong>Juni 2026</strong></p>
+            <p>Taken aangemaakt <strong><?php 
+            $counts = taken_tellen();
+            echo htmlspecialchars($counts['totaal']); ?></strong></p>
+            <p>Taken voltooid <strong><?php echo htmlspecialchars($counts['voltooid']); ?></strong></p>
+            <?php
+                $gemaakt_display = 'Onbekend';
+                if (isset($_SESSION['user_id'])) {
+                    $uid = (int) $_SESSION['user_id'];
+                    $stmt_d = $conn->prepare("SELECT gemaakt_op FROM users WHERE id = ? LIMIT 1");
+                    if ($stmt_d) {
+                        $stmt_d->bind_param('i', $uid);
+                        $stmt_d->execute();
+                        $gemaakt_op = null;
+                        $stmt_d->bind_result($gemaakt_op);
+                        if ($stmt_d->fetch() && $gemaakt_op) {
+                            $ts = strtotime($gemaakt_op);
+                            if ($ts !== false) {
+                                $gemaakt_display = date('j-m-Y h:i:s', $ts);
+                            } else {
+                                $gemaakt_display = $gemaakt_op;
+                            }
+                        }
+                        $stmt_d->close();
+                    }
+                }
+            ?>
+            <p>Lid sinds <strong><?php echo htmlspecialchars($gemaakt_display); ?></strong></p>
         </div>
 
     </div>
 
 </div>
-
-<button class="save-btn">
-    Opslaan
-</button>
 
 <script>
 (function(){

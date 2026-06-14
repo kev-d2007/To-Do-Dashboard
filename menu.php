@@ -112,7 +112,6 @@ document.addEventListener('change', function(e){
 </script>
 
 <script>
-// Global handler for task completion (works for AJAX-loaded content)
 function showToast(message){
     var container = document.getElementById('toast-container');
     if(!container) return;
@@ -143,7 +142,40 @@ document.addEventListener('change', function(e){
                 alert('Kon taak niet bijwerken.');
                 checkbox.checked = !checkbox.checked;
             } else {
-                if(val === 1){ showToast('Taak afgerond'); }
+                if(val === 1){
+                    showToast('Taak afgerond');
+                    // na verdwijnen toast verwijderen we de voltooide taak en vullen we aan
+                    setTimeout(function(){
+                        // verwijder de taakkaart
+                        var card = checkbox.closest('.task-card');
+                        if (card && card.parentNode) card.parentNode.removeChild(card);
+
+                        // bepaal huidige getoonde ids om uit te sluiten
+                        var ids = Array.from(document.querySelectorAll('.task-card input[data-id]')).map(function(i){ return i.getAttribute('data-id'); });
+
+                        // vraag één volgende onvoltooide taak op
+                        fetch('volgende_taak.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ exclude: ids })
+                        }).then(function(res){ return res.json(); })
+                        .then(function(resp){
+                            if(resp && resp.success && resp.task){
+                                var t = resp.task;
+                                var prioClass = t.prioriteit == 1 ? 'priority-high' : (t.prioriteit == 2 ? 'priority-medium' : 'priority-low');
+                                var newCard = document.createElement('div');
+                                newCard.className = 'task-card ' + prioClass;
+                                newCard.innerHTML = '<input type="checkbox" class="task-complete" data-id="' + t.id + '" />'
+                                    + '<span>' + escapeHtml(t.titel) + '</span>'
+                                    + '<div class="badge ' + prioClass + '">' + t.prioriteit + '</div>';
+                                var left = document.querySelector('.left-panel');
+                                var allLink = left ? left.querySelector('.all-tasks-link') : null;
+                                if (allLink) left.insertBefore(newCard, allLink);
+                                else if (left) left.appendChild(newCard);
+                            }
+                        }).catch(function(){});
+                    }, 3300);
+                }
                 else { showToast('Taak heropend'); }
             }
         }).catch(function(){
@@ -152,6 +184,11 @@ document.addEventListener('change', function(e){
         });
     }
 });
+
+// helper voor veilige HTML-escape (klein)
+function escapeHtml(str){
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
 </script>
 
 </body>

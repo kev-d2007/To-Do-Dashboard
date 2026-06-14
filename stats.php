@@ -35,6 +35,7 @@
 </div>
 
 <h3>Wekelijkse taken — voltooid vs aangemaakt per dag</h3>
+<h4>Kan ik alleen nog niet werkend krijgen, dus voorlopig is dit niet beschikbaar.</h4>
 
 <div class="weekly-stats">
 

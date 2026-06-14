@@ -13,18 +13,19 @@ if (!function_exists('logged_in')) {
     if (isset($_SESSION['user_id']) && (!isset($_SESSION['username']) || !isset($_SESSION['email']))) {
         $uid = (int) $_SESSION['user_id'];
         if ($uid > 0) {
-            $stmt = $conn->prepare("SELECT gebruiker, email FROM users WHERE id = ? LIMIT 1");
+            $stmt = $conn->prepare("SELECT gebruiker, email, gemaakt_op FROM users WHERE id = ? LIMIT 1");
             if ($stmt) {
                 $stmt->bind_param('i', $uid);
                 $stmt->execute();
-                $g = null;
-                $e = null;
-                $stmt->bind_result($g, $e);
+                $g = '';
+                $e = '';
+                $gemaakt = '';
+                $stmt->bind_result($g, $e, $gemaakt);
                 if ($stmt->fetch()) {
-                    if (!isset($_SESSION['username']) && $g !== null && $g !== '') $_SESSION['username'] = $g;
-                    if (!isset($_SESSION['email']) && $e !== null && $e !== '') $_SESSION['email'] = $e;
+                    $_SESSION['username'] = $g !== null ? $g : '';
+                    $_SESSION['email'] = $e !== null ? $e : '';
+                    $_SESSION['gemaakt_op'] = $gemaakt !== null ? $gemaakt : '';
                 }
-                $stmt->close();
             }
         }
     }
@@ -59,10 +60,12 @@ if (!function_exists('confirm_logged_in')) {
     }
 
 if (!function_exists('login')) {
-    function login($user_id = 0, $gebruiker = '', $email = '') {
+    function login($user_id = 0, $gebruiker = '', $email = '', $gemaakt_op = null) {
         $_SESSION['user_id'] = isset($user_id) ? (int)$user_id : 0;
         $_SESSION['username'] = isset($gebruiker) ? $gebruiker : '';
         $_SESSION['email'] = isset($email) ? $email : '';
+        $_SESSION['gemaakt_op'] = isset($gemaakt_op) ? $gemaakt_op : '';
+
     }
 }
 
