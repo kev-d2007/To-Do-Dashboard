@@ -1,5 +1,6 @@
 <?php
 require_once 'database.php';
+require_once 'functions.php';
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $identifier = isset($_POST['username']) ? trim($_POST['username']) : '';
