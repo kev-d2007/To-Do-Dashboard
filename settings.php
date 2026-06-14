@@ -20,7 +20,7 @@
 
         <div class="setting-row">
             <h3>Wachtwoord wijzigen</h3>
-            <a href="#">Wijzigen →</a>
+            <a href="ww_reset.php">Wijzigen →</a>
         </div>
 
         <hr>

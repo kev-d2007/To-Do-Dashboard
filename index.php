@@ -14,6 +14,10 @@
         if  (logged_in()) {
             require_once 'menu.php';
         }
+        else {
+            header("Location: login.php");
+            exit;
+        }
     ?>
     <main id="content"></main>
 </body>

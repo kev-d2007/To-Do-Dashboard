@@ -26,7 +26,7 @@
 
     
     <div class="logout-section">
-    <button class="menu-btn" onclick="get_page('logout.php')">
+    <button class="menu-btn" onclick="logout()">
         <i class="fa-solid fa-right-from-bracket"></i>
         Afmelden
     </button>
