@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Vul gebruikersnaam/e-mailadres en wachtwoord in.';
     } else {
         global $conn;
-        $stmt = $conn->prepare("SELECT id, gebruiker, wachtwoord FROM users WHERE gebruiker = ? OR email = ? LIMIT 1");
+        $stmt = $conn->prepare("SELECT id, gebruiker, email, wachtwoord FROM users WHERE gebruiker = ? OR email = ? LIMIT 1");
         if ($stmt) {
             $stmt->bind_param('ss', $identifier, $identifier);
             $stmt->execute();
@@ -19,13 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $id = null;
                 $gebruiker = null;
+                $email = null;
                 $hash = null;
-                $stmt->bind_result($id, $gebruiker, $hash);
+                $stmt->bind_result($id, $gebruiker, $email, $hash);
                 $stmt->fetch();
                 if ($hash !== null && password_verify($password, $hash)) {
                     session_regenerate_id(true);
-                    $_SESSION['user_id'] = $id;
-                    $_SESSION['username'] = $gebruiker;
+                    if (function_exists('login')) {
+                        login($id, $gebruiker, $email);
+                    } else {
+                        $_SESSION['user_id'] = $id;
+                        $_SESSION['username'] = $gebruiker;
+                        $_SESSION['email'] = $email;
+                    }
                     header('Location: menu.php');
                     exit;
                 } else {

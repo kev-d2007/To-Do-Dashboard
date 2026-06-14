@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php
-        include 'functions.php';
+        require_once 'functions.php';
         confirm_logged_in();
         if  (logged_in()) {
             require_once 'menu.php';

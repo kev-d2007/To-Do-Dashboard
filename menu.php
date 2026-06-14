@@ -1,4 +1,4 @@
-<?php include 'functions.php'; confirm_logged_in(); ?>
+<?php require_once 'functions.php'; confirm_logged_in(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,19 +7,24 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
+<body<?php echo (isset($_SESSION['theme']) && $_SESSION['theme'] == 2) ? ' class="dark-mode"' : ''; ?>>
+    <div id="toast-container" aria-live="polite"></div>
     <aside class="sidebar">
         
     <div class="logo-box">
     <img src="img/logo.png" alt="Logo" id="main-logo">
     </div>
-    <button type="button" class="menu-btn" onclick="loadPage('dashboard.php', this)">
+    <div class="welkom-box">
+        <?php $display_name = isset($_SESSION['username']) && $_SESSION['username'] !== '' ? $_SESSION['username'] : 'Gebruiker'; ?>
+        <p style="color: #d9dadc;">Welkom terug, <strong style="color: #fc2121; font: bold;"><?php echo htmlspecialchars($display_name); ?></strong></p>
+    </div>
+    <button type="button" class="menu-btn" data-page="dashboard.php" onclick="loadPage('dashboard.php', this)">
     <i class="fa-solid fa-table-columns"></i> Dashboard </button>
 
-    <button type="button" class="menu-btn" onclick="loadPage('stats.php', this)">
+    <button type="button" class="menu-btn" data-page="stats.php" onclick="loadPage('stats.php', this)">
     <i class="fa-solid fa-chart-simple"></i> Statistieken</button>
 
-    <button type="button" class="menu-btn" onclick="loadPage('settings.php', this)">
+    <button type="button" class="menu-btn" data-page="settings.php" onclick="loadPage('settings.php', this)">
     <i class="fa-solid fa-gear"></i> Instellingen</button>
 
     <a class="category-title">Categorieën</a>
@@ -35,8 +40,15 @@
 
     </aside>
 
+<?php
+    $allowed_pages = ['dashboard.php','stats.php','settings.php'];
+    $page = 'dashboard.php';
+    if (isset($_GET['page']) && in_array($_GET['page'], $allowed_pages)) {
+        $page = $_GET['page'];
+    }
+?>
 <main id="content">
-    <?php include 'dashboard.php'; ?>
+    <?php include $page; ?>
 </main>
 
 <script>
@@ -46,7 +58,10 @@ function loadPage(page, button) {
         btn.classList.remove('active');
     });
 
-    button.classList.add('active');
+    if (!button) {
+        button = document.querySelector('.menu-btn[data-page="' + page + '"]');
+    }
+    if (button) button.classList.add('active');
 
     fetch(page)
         .then(response => {
@@ -57,12 +72,26 @@ function loadPage(page, button) {
         })
         .then(html => {
             document.getElementById("content").innerHTML = html;
+            try {
+                history.pushState({page: page}, '', 'menu.php?page=' + encodeURIComponent(page));
+            } catch (e) {}
         })
         .catch(error => {
             document.getElementById("content").innerHTML = "<p>Fout bij laden van pagina.</p>";
             console.error(error);
         });
 }
+
+window.addEventListener('popstate', function(e){
+    var page = (e.state && e.state.page) ? e.state.page : (new URLSearchParams(location.search)).get('page') || 'dashboard.php';
+    loadPage(page);
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    var current = (new URLSearchParams(location.search)).get('page') || 'dashboard.php';
+    var btn = document.querySelector('.menu-btn[data-page="' + current + '"]');
+    if (btn) btn.classList.add('active');
+});
 function logout() {
     if (confirm("Weet je zeker dat je wilt uitloggen?")) {
         window.location.href = "logout.php";
@@ -78,6 +107,49 @@ document.addEventListener('change', function(e){
 
     if(e.target.id === 'light-theme'){
         document.body.classList.remove('dark-mode');
+    }
+});
+</script>
+
+<script>
+// Global handler for task completion (works for AJAX-loaded content)
+function showToast(message){
+    var container = document.getElementById('toast-container');
+    if(!container) return;
+    var toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(function(){
+        toast.classList.add('hide');
+        setTimeout(function(){ if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+    }, 3000);
+}
+
+document.addEventListener('change', function(e){
+    var target = e.target;
+    if (!target) return;
+    if (target.classList && target.classList.contains('task-complete')) {
+        var checkbox = target;
+        var id = checkbox.getAttribute('data-id');
+        var val = checkbox.checked ? 1 : 0;
+        fetch('taak_afronden.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, afgerond: val })
+        }).then(function(res){ return res.json(); })
+        .then(function(data){
+            if(!data || !data.success){
+                alert('Kon taak niet bijwerken.');
+                checkbox.checked = !checkbox.checked;
+            } else {
+                if(val === 1){ showToast('Taak afgerond'); }
+                else { showToast('Taak heropend'); }
+            }
+        }).catch(function(){
+            alert('Netwerkfout bij bijwerken taak.');
+            checkbox.checked = !checkbox.checked;
+        });
     }
 });
 </script>

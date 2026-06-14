@@ -10,18 +10,59 @@ if (!function_exists('logged_in')) {
         return isset($_SESSION['user_id']);
     }
 }
+    if (isset($_SESSION['user_id']) && (!isset($_SESSION['username']) || !isset($_SESSION['email']))) {
+        $uid = (int) $_SESSION['user_id'];
+        if ($uid > 0) {
+            $stmt = $conn->prepare("SELECT gebruiker, email FROM users WHERE id = ? LIMIT 1");
+            if ($stmt) {
+                $stmt->bind_param('i', $uid);
+                $stmt->execute();
+                $g = null;
+                $e = null;
+                $stmt->bind_result($g, $e);
+                if ($stmt->fetch()) {
+                    if (!isset($_SESSION['username']) && $g !== null && $g !== '') $_SESSION['username'] = $g;
+                    if (!isset($_SESSION['email']) && $e !== null && $e !== '') $_SESSION['email'] = $e;
+                }
+                $stmt->close();
+            }
+        }
+    }
+
+    // laad thema-instelling altijd uit de DB voor gebruiker
+    if (isset($_SESSION['user_id'])) {
+        $uid = (int) $_SESSION['user_id'];
+        $theme_val = 1;
+        if ($uid > 0) {
+            $stmt_t = $conn->prepare("SELECT thema FROM settings WHERE user_id = ? LIMIT 1");
+            if ($stmt_t) {
+                $stmt_t->bind_param('i', $uid);
+                $stmt_t->execute();
+                $t = null;
+                $stmt_t->bind_result($t);
+                if ($stmt_t->fetch()) {
+                    $theme_val = ((string)$t === '2') ? 2 : 1;
+                }
+                $stmt_t->close();
+            }
+        }
+        $_SESSION['theme'] = $theme_val;
+    }
 
 
 if (!function_exists('confirm_logged_in')) {
     function confirm_logged_in() {
     // tijdelijk uitgeschakeld zodat je direct naar menu.php kan
+    // waarom doe je dit?
     return true;
 }
     }
 
 if (!function_exists('login')) {
-    function login($user_id) {
-        $_SESSION['user_id'] = $user_id;
+    function login($user_id = 0, $gebruiker = '', $email = '') {
+        $_SESSION['user_id'] = isset($user_id) ? (int)$user_id : 0;
+        $_SESSION['username'] = isset($gebruiker) ? $gebruiker : '';
+        $_SESSION['email'] = isset($email) ? $email : '';
     }
 }
 
@@ -66,5 +107,39 @@ if (!function_exists('reset_ww')) {
         $stmd->close();
         return $ok ? true : false;
     }
+}
+
+//telt de taken
+function taken_tellen($user_id = null) {
+    global $conn;
+    if ($user_id === null || $user_id === '') {
+        if (isset($_SESSION['user_id'])) {
+            $user_id = (int) $_SESSION['user_id'];
+        } else {
+            return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0];
+        }
+    }
+    $user_id = (int) $user_id;
+    $stmt = $conn->prepare(
+        "SELECT 
+            COUNT(*) AS totaal_taken,
+            SUM(afgerond = 1) AS voltooide_taken,
+            SUM(afgerond = 0) AS onvoltooide_taken
+        FROM taken
+        WHERE user_id = ?"
+    );
+    if (!$stmt) return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0];
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $data = $res ? $res->fetch_assoc() : null;
+    $stmt->close();
+
+    if (!$data) return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0];
+
+    $totaal_taken = isset($data['totaal_taken']) ? (int)$data['totaal_taken'] : 0;
+    $voltooide_taken = isset($data['voltooide_taken']) ? (int)$data['voltooide_taken'] : 0;
+    $onvoltooide_taken = isset($data['onvoltooide_taken']) ? (int)$data['onvoltooide_taken'] : 0;
+    return ['totaal' => $totaal_taken, 'voltooid' => $voltooide_taken, 'onvoltooid' => $onvoltooide_taken];
 }
 ?>

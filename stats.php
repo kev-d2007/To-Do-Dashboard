@@ -1,25 +1,34 @@
+<?php require_once 'functions.php'?>
 <h1>Statistieken</h1>
+<h4 style="color: #666; font-size: 14px;">
+    Statistieken zijn mogelijk niet accuraat. Log opnieuw in om de nieuwste gegevens te zien.
+</h4>
 
 <div class="stats-top">
 
     <div class="big-stat green">
-        <span>172</span>
+        <span>
+            <?php
+                $counts = taken_tellen();
+                echo htmlspecialchars($counts['voltooid']);
+            ?>
+        </span>
         <p>Taken voltooid</p>
     </div>
 
     <div class="big-stat orange">
-        <span>50</span>
+        <span><?php echo htmlspecialchars($counts['onvoltooid'] ?? 0); ?></span>
         <p>Taken onvoltooid</p>
     </div>
 
     <div class="percent-card">
         <div class="circle">
-            <span>66%</span>
+            <span><?php echo htmlspecialchars($counts['percentage'] ?? 0); ?>%</span>
         </div>
 
         <div>
-            <h2>66%</h2>
-            <p>Aantal %<br>172 van 222</p>
+            <h2><?php echo htmlspecialchars($counts['percentage'] ?? 0); ?>%</h2>
+            <p>Aantal % voltooid<br><?php echo htmlspecialchars($counts['voltooid'] ?? 0); ?> van <?php echo htmlspecialchars($counts['totaal'] ?? 0); ?></p>
         </div>
     </div>
 

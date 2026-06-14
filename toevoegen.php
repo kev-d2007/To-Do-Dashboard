@@ -1,6 +1,6 @@
 <?php
     include 'database.php';
-    include 'functions.php';
+    require_once 'functions.php';
     confirm_logged_in();
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $task = $_POST['taak'];

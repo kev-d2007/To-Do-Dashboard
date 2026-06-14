@@ -1,5 +1,7 @@
-<?php include 'functions.php'; include 'database.php'; confirm_logged_in(); ?>
+<?php require_once 'functions.php'; require_once 'database.php'; confirm_logged_in(); ?>
 <h1>Mijn taken</h1>
+
+<div id="toast-container" aria-live="polite"></div>
 
 <div class="task-input">
     <form method="POST" action="toevoegen.php">
@@ -45,7 +47,7 @@
                     $class = $prio === 1 ? 'priority-high' : ($prio === 2 ? 'priority-medium' : 'priority-low');
                     $checked = $row['afgerond'] ? 'checked' : '';
                     echo '<div class="task-card '.htmlspecialchars($class).'">';
-                    echo '<input type="checkbox" '.($checked).' />';
+                    echo '<input type="checkbox" class="task-complete" data-id="'.htmlspecialchars($row['id']).'" '.($checked).' />';
                     echo '<span>'.htmlspecialchars($row['titel']).'</span>';
                     echo '<div class="badge '.htmlspecialchars($class).'">'.htmlspecialchars($prio).'</div>';
                     echo '</div>';
@@ -87,11 +89,14 @@
                 <div class="progress-fill"></div>
             </div>
 
-            <p>70% van de dagtaken klaar</p>
+            <p>70% van de dagtaken zijn voltooid</p>
+            <p>30% van de dagtaken zijn aangemaakt</p>
 
         </div>
 
-        <div class="week-card">
+        <!-- Voortgang van de week hieronder werkt niet, dus wordt weggelaten -->
+
+        <!-- <div class="week-card">
 
             <h4>Voortgang deze week</h4>
 
@@ -109,7 +114,7 @@
             <span>⬜ Weinig</span>
             <span>🟩 Veel</span>
 
-            </div>
+            </div> -->
 
         <div class="week-footer">
         <span>Gemiddeld voltooid</span>
@@ -119,5 +124,7 @@
         </div>
 
     </div>
+
+        
 
 </div>

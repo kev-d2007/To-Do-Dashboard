@@ -8,7 +8,9 @@ body{
 #content{
     flex:1;
     background:white;
-    padding:20px;
+    padding-left:40px;
+    padding-top:20px;
+    margin-left:250px;
 }
 
 #content h1{
@@ -143,7 +145,7 @@ body{
 .stats-card{
     background:white;
     border-radius:12px;
-    padding:18px;
+    padding:10px;
     box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
@@ -198,13 +200,14 @@ body{
 .stats-card p{
     color:#7d8a99;
     font-weight:bold;
+    margin: 10px 0;
 }
 
 .week-card{
     background:white;
     border-radius:12px;
     padding:18px;
-    margin-top:18px;
+    margin-top:16px;
     box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
@@ -276,11 +279,14 @@ body{
 }
 
 .sidebar{
-width:250px;
-min-height:100vh;
-padding:10px;
-background:darkslategray;
-position:relative;
+    width:250px;
+    height:100vh;
+    padding:10px;
+    background:darkslategray;
+    position:fixed;
+    top:0;
+    left:0;
+    overflow:auto;
 }
 
 .logo-box{
@@ -398,6 +404,25 @@ position:relative;
     justify-content:flex-start;
     gap:30px;
 }
+
+/* Toast notification */
+#toast-container{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:10000;
+}
+.toast{
+    background:rgba(0,0,0,0.85);
+    color:white;
+    padding:10px 14px;
+    margin-bottom:8px;
+    border-radius:6px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    opacity:1;
+    transition:opacity .3s, transform .3s;
+}
+.toast.hide{ opacity:0; transform:translateY(-10px); }
 .circle.small{
     width:100px;
     height:100px;
@@ -573,8 +598,8 @@ body:has(.login-container)::before{
 }
 
 .avatar{
-    width:60px;
-    height:60px;
+    min-width:60px;
+    min-height:60px;
     border-radius:50%;
     background:#4a90e2;
     color:white;
