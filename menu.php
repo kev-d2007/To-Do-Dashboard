@@ -18,14 +18,14 @@
         <?php $display_name = isset($_SESSION['username']) && $_SESSION['username'] !== '' ? $_SESSION['username'] : 'Gebruiker'; ?>
         <p style="color: #d9dadc;">Welkom terug, <strong style="color: #fc2121; font: bold;"><?php echo htmlspecialchars($display_name); ?></strong></p>
     </div>
-    <button type="button" class="menu-btn" data-page="dashboard.php" onclick="loadPage('dashboard.php', this)">
-    <i class="fa-solid fa-table-columns"></i> Dashboard </button>
+    <a class="menu-btn" href="menu.php?page=dashboard.php" data-page="dashboard.php" onclick="loadPage('dashboard.php', this)">
+    <i class="fa-solid fa-table-columns"></i> Dashboard </a>
 
-    <button type="button" class="menu-btn" data-page="stats.php" onclick="loadPage('stats.php', this)">
-    <i class="fa-solid fa-chart-simple"></i> Statistieken</button>
+    <a class="menu-btn" href="menu.php?page=stats.php" data-page="stats.php" onclick="loadPage('stats.php', this)">
+    <i class="fa-solid fa-chart-simple"></i> Statistieken</a>
 
-    <button type="button" class="menu-btn" data-page="settings.php" onclick="loadPage('settings.php', this)">
-    <i class="fa-solid fa-gear"></i> Instellingen</button>
+    <a class="menu-btn" href="menu.php?page=settings.php" data-page="settings.php" onclick="loadPage('settings.php', this)">
+    <i class="fa-solid fa-gear"></i> Instellingen</a>
 
     <a class="category-title">Categorieën</a>
 

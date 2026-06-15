@@ -6,9 +6,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $wachtwoord = isset($_POST['wachtwoord']) ? trim($_POST['wachtwoord']) : null;
     $result = registreren($username, $email, $wachtwoord);
-    if ($result === true) {
-        $message = 'Account succesvol aangemaakt.';
-        ?><script>console.log('Account succesvol aangemaakt.');</script><?php
+    if (is_int($result) && $result > 0) {
+        session_regenerate_id(true);
+        if (function_exists('login')) {
+            login($result, $username, $email);
+        } else {
+            $_SESSION['user_id'] = $result;
+            $_SESSION['username'] = $username;
+            $_SESSION['email'] = $email;
+        }
+        header('Location: menu.php');
+        exit;
     } elseif ($result === 'short') {
         $message = 'Het wachtwoord moet minimaal 8 karakters bevatten.';
     } elseif ($result === 'exists') {
@@ -37,15 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="reset-container">
 
             <?php if ($message !== ''): ?>
-                <div class="notice <?php echo (isset($result) && $result === true) ? 'success' : 'error'; ?>">
+                <div class="notice <?php echo (isset($result) && is_int($result) && $result > 0) ? 'success' : 'error'; ?>">
                     <?php echo htmlspecialchars($message); ?>
                 </div>
-
-                <?php if (isset($result) && $result === true): ?>
+                <?php if (isset($result) && is_int($result) && $result > 0): ?>
                     <script>
                         setTimeout(function(){
-                            window.location.href = 'login.php';
-                        }, 3000);
+                            window.location.href = 'menu.php';
+                        }, 1000);
                     </script>
                 <?php endif; ?>
             <?php endif; ?>

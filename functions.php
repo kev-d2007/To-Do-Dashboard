@@ -176,22 +176,34 @@ Function registreren($username, $email, $wachtwoord) {
         return 'short';
     }
 
-    $stmt_check = $conn->prepare("SELECT id FROM users WHERE gebruiker = ? OR email = ?");
-    if (!$stmt_check) return false;
-    $stmt_check->bind_param('ss', $username, $email);
-    $stmt_check->execute();
-    $exists = $stmt_check->fetch();
-    $stmt_check->close();
-    if ($exists) {
+    $email_trim = is_null($email) ? '' : trim($email);
+    if ($email_trim === '') {
+        $stmt_check = $conn->prepare("SELECT id FROM users WHERE gebruiker = ? LIMIT 1");
+        if (!$stmt_check) return false;
+        $stmt_check->bind_param('s', $username);
+    } else {
+        $stmt_check = $conn->prepare("SELECT id FROM users WHERE gebruiker = ? OR email = ? LIMIT 1");
+        if (!$stmt_check) return false;
+        $stmt_check->bind_param('ss', $username, $email_trim);
+    }
+    if (!$stmt_check->execute()) {
+        $stmt_check->close();
+        return false;
+    }
+    $stmt_check->store_result();
+    if ($stmt_check->num_rows > 0) {
+        $stmt_check->close();
         return 'exists';
     }
+    $stmt_check->close();
 
     $hashed = password_hash($wachtwoord, PASSWORD_DEFAULT);
     $stmt = $conn->prepare("INSERT INTO users (gebruiker, email, wachtwoord) VALUES (?, ?, ?)");
     if (!$stmt) return false;
     $stmt->bind_param('sss', $username, $email, $hashed);
     $ok = $stmt->execute();
+    $insert_id = $stmt->insert_id;
     $stmt->close();
-    return $ok ? true : false;
+    return $ok ? (int)$insert_id : false;
 }
 ?>

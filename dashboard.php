@@ -63,7 +63,7 @@
         $counts = taken_tellen();
         ?>
 
-        <button type="button" onclick="loadPage('alle_taken.php', this)" class="all-tasks-link">alle taken</button>
+        <a href="menu.php?page=alle_taken.php" type="button" onclick="loadPage('alle_taken.php', this)" class="all-tasks-link">alle taken</a>
 
     </div>
 
