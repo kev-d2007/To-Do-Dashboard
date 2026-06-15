@@ -281,7 +281,6 @@ body{
     color:#4caf50;
 }
 
-/* Matrix: open vs done per priority */
 .matrix-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
 .matrix-row{display:flex;align-items:center;gap:10px}
 .matrix-label{width:90px;font-weight:700;color:#0f172a}

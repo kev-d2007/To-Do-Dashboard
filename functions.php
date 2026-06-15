@@ -166,4 +166,32 @@ function prestatie() {
         return 'Je moet taken afronden!';
     }
 }
+
+Function registreren($username, $email, $wachtwoord) {
+    global $conn;
+    if ($wachtwoord === null || $wachtwoord === '') {
+        return 'short';
+    }
+    if (strlen($wachtwoord) < 8) {
+        return 'short';
+    }
+
+    $stmt_check = $conn->prepare("SELECT id FROM users WHERE gebruiker = ? OR email = ?");
+    if (!$stmt_check) return false;
+    $stmt_check->bind_param('ss', $username, $email);
+    $stmt_check->execute();
+    $exists = $stmt_check->fetch();
+    $stmt_check->close();
+    if ($exists) {
+        return 'exists';
+    }
+
+    $hashed = password_hash($wachtwoord, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare("INSERT INTO users (gebruiker, email, wachtwoord) VALUES (?, ?, ?)");
+    if (!$stmt) return false;
+    $stmt->bind_param('sss', $username, $email, $hashed);
+    $ok = $stmt->execute();
+    $stmt->close();
+    return $ok ? true : false;
+}
 ?>
