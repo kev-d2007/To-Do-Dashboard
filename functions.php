@@ -151,7 +151,9 @@ function taken_tellen($user_id = null) {
 function prestatie() {
     $counts = taken_tellen();
     $voltooide_taken = isset($counts['voltooid']) ? (int)$counts['voltooid'] : 0;
-    $percentage = isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0;
+    $open_taken = isset($counts['onvoltooid']) ? (int)$counts['onvoltooid'] : 0;
+    $total = $voltooide_taken + $open_taken;
+    $percentage = $total > 0 ? round(($voltooide_taken / $total) * 100, 2) : 0;
     if ($percentage > 80) {
         return 'Je bent geweldig bezig!';
     } else if ($percentage > 60) {

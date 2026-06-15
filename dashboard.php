@@ -76,7 +76,7 @@
             <div class="stats-row">
 
                 <div class="completed-box">
-                    <span class="number"><?php echo htmlspecialchars($counts['onvoltooid'] ?? 0); ?></span>
+                    <span class="number"><?php echo htmlspecialchars($counts['voltooid'] ?? 0); ?></span>
                     <span>Voltooid</span>
                 </div>
 

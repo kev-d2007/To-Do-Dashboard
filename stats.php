@@ -14,7 +14,11 @@ if (!isset($conn) || $conn === null) {
         <span>
             <?php
                 $counts = taken_tellen();
-                echo htmlspecialchars($counts['voltooid']);
+                $completed = isset($counts['voltooid']) ? (int)$counts['voltooid'] : 0;
+                $open = isset($counts['onvoltooid']) ? (int)$counts['onvoltooid'] : 0;
+                $total_count = $completed + $open;
+                $completed_pct = $total_count > 0 ? round(($completed / $total_count) * 100, 2) : 0;
+                echo htmlspecialchars($completed);
             ?>
         </span>
         <p>Taken voltooid</p>
@@ -27,14 +31,14 @@ if (!isset($conn) || $conn === null) {
 
     <div class="percent-card">
         <div class="circle">
-            <span><?php echo isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0; ?>%</span>
+            <span><?php echo $completed_pct; ?>%</span>
         </div>
 
         <div>
             <h5><?php 
             $prestatie = prestatie();
             echo isset($prestatie) ? $prestatie : 'Geen gegevens beschikbaar'; ?></h5>
-            <p><?php echo isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0; ?>% voltooid<br><?php echo htmlspecialchars($counts['voltooid'] ?? 0); ?> van <?php echo htmlspecialchars($counts['totaal'] ?? 0); ?></p>
+            <p><?php echo $completed_pct; ?>% voltooid<br><?php echo htmlspecialchars($completed); ?> van <?php echo htmlspecialchars($total_count); ?></p>
         </div>
     </div>
 
