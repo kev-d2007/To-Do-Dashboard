@@ -125,5 +125,3 @@
         </div>
     </div>
 </div>
-
-<!-- no inline script needed here; menu.php provides loadPage() -->

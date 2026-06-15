@@ -1,4 +1,8 @@
-<?php require_once 'functions.php'?>
+<?php require_once 'functions.php';
+if (!isset($conn) || $conn === null) {
+    require_once 'database.php';
+}
+?>
 <h1>Statistieken</h1>
 <h4 style="color: #666; font-size: 14px;">
     Statistieken zijn mogelijk niet accuraat. Log opnieuw in om de nieuwste gegevens te zien.
@@ -36,45 +40,100 @@
 
 </div>
 
-<h3>Wekelijkse taken — voltooid vs aangemaakt per dag</h3>
-<h4>Kan ik alleen nog niet werkend krijgen, dus voorlopig is dit niet beschikbaar.</h4>
+<h3>Laatste 7 dagen — aanmaak per dag</h3>
 
-<div class="weekly-stats">
+<?php
+$user_id = (int)($_SESSION['user_id'] ?? 0);
+$date_col = null;
+$resCol = $conn->query("SHOW COLUMNS FROM taken");
+if ($resCol) {
+    while ($col = $resCol->fetch_assoc()) {
+        $name = $col['Field'];
+        if (in_array($name, ['gemaakt_op','created_at','created'])) { $date_col = $name; break; }
+    }
+}
 
-    <div class="day-circle">
-        <div class="circle small"><span>80%</span></div>
-        <strong>Ma</strong>
-        <p>80/100</p>
+$prio_counts = ['1'=>0,'2'=>0,'3'=>0];
+$stmtp = $conn->prepare("SELECT prioriteit, COUNT(*) as cnt FROM taken WHERE user_id = ? GROUP BY prioriteit");
+if ($stmtp) {
+    $stmtp->bind_param('i', $user_id);
+    $stmtp->execute();
+    $rp = $stmtp->get_result();
+    while ($rpRow = $rp->fetch_assoc()) {
+        $p = (int)$rpRow['prioriteit'];
+        $prio_counts[(string)$p] = (int)$rpRow['cnt'];
+    }
+    $stmtp->close();
+}
+
+$prio_total = array_sum($prio_counts);
+
+$matrix = [
+    '1'=>['open'=>0,'done'=>0],
+    '2'=>['open'=>0,'done'=>0],
+    '3'=>['open'=>0,'done'=>0]
+];
+$stmtm = $conn->prepare("SELECT prioriteit, afgerond, COUNT(*) as cnt FROM taken WHERE user_id = ? GROUP BY prioriteit, afgerond");
+if ($stmtm) {
+    $stmtm->bind_param('i', $user_id);
+    $stmtm->execute();
+    $rm = $stmtm->get_result();
+    while ($mrow = $rm->fetch_assoc()) {
+        $p = (string)((int)$mrow['prioriteit']);
+        $done = (int)$mrow['afgerond'] ? 'done' : 'open';
+        if (!isset($matrix[$p])) $matrix[$p] = ['open'=>0,'done'=>0];
+        $matrix[$p][$done] = (int)$mrow['cnt'];
+    }
+    $stmtm->close();
+}
+
+$recent = [];
+$stmtr = $conn->prepare("SELECT id, titel, prioriteit FROM taken WHERE user_id = ? ORDER BY id DESC LIMIT 7");
+if ($stmtr) {
+    $stmtr->bind_param('i', $user_id);
+    $stmtr->execute();
+    $rr = $stmtr->get_result();
+    while ($rrow = $rr->fetch_assoc()) { $recent[] = $rrow; }
+    $stmtr->close();
+}
+?>
+
+<div class="stats-grid">
+    <div class="prio-box big">
+        <h4>Prioriteit verdeling</h4>
+        <div class="prio-list">
+            <?php foreach (['1'=>'Hoog','2'=>'Gemiddeld','3'=>'Laag'] as $k=>$label):
+                $cnt = $prio_counts[$k] ?? 0;
+                $pct = $prio_total ? round($cnt/$prio_total*100) : 0;
+            ?>
+            <div class="prio-row">
+                <div class="prio-label"><?php echo $label; ?></div>
+                <div class="prio-bar"><div class="fill p<?php echo $k; ?>" style="width:<?php echo $pct; ?>%"></div></div>
+                <div class="prio-count"><?php echo $cnt; ?> (<?php echo $pct; ?>%)</div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 
-    <div class="day-circle">
-        <div class="circle small"><span>67%</span></div>
-        <strong>Di</strong>
-        <p>60/90</p>
+    <div class="words-box">
+        <h4>Open vs Afgerond per prioriteit</h4>
+        <div class="matrix-list">
+            <?php foreach (['1'=>'Hoog','2'=>'Gemiddeld','3'=>'Laag'] as $k=>$label):
+                $open = $matrix[$k]['open'] ?? 0;
+                $done = $matrix[$k]['done'] ?? 0;
+                $total = $open + $done;
+                $open_pct = $total ? round($open / $total * 100) : 0;
+                $done_pct = $total ? round($done / $total * 100) : 0;
+            ?>
+            <div class="matrix-row">
+                <div class="matrix-label"><?php echo $label; ?></div>
+                <div class="matrix-bars">
+                    <div class="bar open"><div class="fill" style="width:<?php echo $open_pct; ?>%"></div></div>
+                    <div class="bar done"><div class="fill" style="width:<?php echo $done_pct; ?>%"></div></div>
+                </div>
+                <div class="matrix-count"><?php echo $open; ?> / <?php echo $done; ?><h5>openstaand/afgerond</h5></div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
-
-    <div class="day-circle">
-        <div class="circle small"><span>89%</span></div>
-        <strong>Wo</strong>
-        <p>85/95</p>
-    </div>
-
-    <div class="day-circle">
-        <div class="circle small"><span>88%</span></div>
-        <strong>Do</strong>
-        <p>70/80</p>
-    </div>
-
-    <div class="day-circle">
-        <div class="circle small"><span>59%</span></div>
-        <strong>Vr</strong>
-        <p>50/85</p>
-    </div>
-
-    <div class="day-circle">
-        <div class="circle small"><span>90%</span></div>
-        <strong>Za</strong>
-        <p>90/100</p>
-    </div>
-
 </div>

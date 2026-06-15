@@ -151,13 +151,14 @@ function taken_tellen($user_id = null) {
 function prestatie() {
     $counts = taken_tellen();
     $voltooide_taken = isset($counts['voltooid']) ? (int)$counts['voltooid'] : 0;
-    if ($voltooide_taken > "80%") {
+    $percentage = isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0;
+    if ($percentage > 80) {
         return 'Je bent geweldig bezig!';
-    } else if ($voltooide_taken > "60%") {
+    } else if ($percentage > 60) {
         return 'Je bent goed op weg!';
-    } else if ($voltooide_taken > "40%") {
+    } else if ($percentage > 40) {
         return 'Het kan beter gaan...';
-    } else if ($voltooide_taken > "20%") {
+    } else if ($percentage > 20) {
         return 'Je hebt nog veel te doen!';
     } else {
         return 'Je moet taken afronden!';
