@@ -41,9 +41,10 @@ confirm_logged_in();
                     echo '<div class="task-main">';
                     echo '<span class="task-title">'.htmlspecialchars($row['titel']).'</span>';
                     echo '<div class="task-meta">';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '<button class="task-delete" data-id="'.htmlspecialchars($row['id']).'" title="Verwijder taak"><i class="fa-solid fa-trash"></i></button>';
                     echo '<span class="badge '.htmlspecialchars($class).'">'.htmlspecialchars($prio).'</span>';
-                    echo '</div>';
-                    echo '</div>';
                     echo '</div>';
                 }
                 $stmt->close();
@@ -58,8 +59,6 @@ confirm_logged_in();
     <aside class="tasks-right">
     </aside>
 </div>
-
-<!-- styling moved to global style.css -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
@@ -95,15 +94,14 @@ document.addEventListener('DOMContentLoaded', function(){
     if (filterOpen) filterOpen.addEventListener('change', applyFilter);
     if (filterCompleted) filterCompleted.addEventListener('change', applyFilter);
 
-    // react to check/uncheck of individual tasks
     document.addEventListener('change', function(e){
         if (e.target && e.target.classList && e.target.classList.contains('task-complete')){
-            // small timeout to allow other handlers (AJAX) to run
             setTimeout(function(){ applyFilter(); }, 100);
         }
     });
 
-    // initial apply
+    document.addEventListener('tasks-updated', function(){ applyFilter(); });
+
     applyFilter();
 });
 </script>

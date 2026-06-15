@@ -185,6 +185,41 @@ document.addEventListener('change', function(e){
     }
 });
 
+// delegated delete handler for task delete buttons
+document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t) return;
+    // support clicking inner <i> too
+    if (t.classList && t.classList.contains('task-delete')) {
+        var btn = t;
+    } else if (t.closest && t.closest('.task-delete')) {
+        var btn = t.closest('.task-delete');
+    } else return;
+
+    var id = btn.getAttribute('data-id');
+    if (!id) return;
+    if (!confirm('Weet je zeker dat je deze taak wilt verwijderen?')) return;
+
+    fetch('delete_task.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id })
+    }).then(function(res){ return res.json(); })
+    .then(function(data){
+        if (data && data.success) {
+            var card = btn.closest('.task-card');
+            if (card && card.parentNode) card.parentNode.removeChild(card);
+            showToast('Taak verwijderd');
+            // notify pages to update counts/filters
+            document.dispatchEvent(new CustomEvent('tasks-updated'));
+        } else {
+            alert('Kon taak niet verwijderen.');
+        }
+    }).catch(function(){
+        alert('Netwerkfout bij verwijderen.');
+    });
+});
+
 // helper voor veilige HTML-escape (klein)
 function escapeHtml(str){
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');

@@ -141,6 +141,25 @@ body{
     right:12px;
 }
 
+/* delete button placed left of the badge */
+.task-delete{
+    position:absolute;
+    bottom:14px;
+    right:56px; /* left of badge which is at 12px */
+    width:34px;
+    height:34px;
+    border-radius:8px;
+    border:none;
+    background:transparent;
+    color:#ef4444;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+.task-delete i{font-size:14px}
+.task-delete:hover{ background:rgba(239,68,68,0.08) }
+
 .badge.orange{
     background:#f97316;
 }

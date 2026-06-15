@@ -48,7 +48,8 @@
                     $checked = $row['afgerond'] ? 'checked' : '';
                     echo '<div class="task-card '.htmlspecialchars($class).'">';
                     echo '<input type="checkbox" class="task-complete" data-id="'.htmlspecialchars($row['id']).'" '.($checked).' />';
-                    echo '<span>'.htmlspecialchars($row['titel']).'</span>';
+                    echo '<div class="task-main"><span>'.htmlspecialchars($row['titel']).'</span></div>';
+                    echo '<button class="task-delete" data-id="'.htmlspecialchars($row['id']).'" title="Verwijder taak"><i class="fa-solid fa-trash"></i></button>';
                     echo '<div class="badge '.htmlspecialchars($class).'">'.htmlspecialchars($prio).'</div>';
                     echo '</div>';
                 }
@@ -118,8 +119,8 @@
             </div> -->
 
         <div class="week-footer">
-        <span>Gemiddeld voltooid</span>
-        <strong>82%</strong>
+        <span>Totaal aantal taken:</span>
+        <strong><?php echo htmlspecialchars($counts['voltooid'] + $counts['onvoltooid'] ?? 0); ?></strong>
         </div>
         </div>
     </div>

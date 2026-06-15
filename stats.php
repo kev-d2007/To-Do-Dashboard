@@ -23,12 +23,14 @@
 
     <div class="percent-card">
         <div class="circle">
-            <span><?php echo htmlspecialchars($counts['percentage'] ?? 0); ?>%</span>
+            <span><?php echo isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0; ?>%</span>
         </div>
 
         <div>
-            <h2><?php echo htmlspecialchars($counts['percentage'] ?? 0); ?>%</h2>
-            <p>Aantal % voltooid<br><?php echo htmlspecialchars($counts['voltooid'] ?? 0); ?> van <?php echo htmlspecialchars($counts['totaal'] ?? 0); ?></p>
+            <h5><?php 
+            $prestatie = prestatie();
+            echo isset($prestatie) ? $prestatie : 'Geen gegevens beschikbaar'; ?></h5>
+            <p><?php echo isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0; ?>% voltooid<br><?php echo htmlspecialchars($counts['voltooid'] ?? 0); ?> van <?php echo htmlspecialchars($counts['totaal'] ?? 0); ?></p>
         </div>
     </div>
 

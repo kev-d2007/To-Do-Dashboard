@@ -147,4 +147,20 @@ function taken_tellen($user_id = null) {
     $hoog = isset($data['hoog']) ? (int)$data['hoog'] : 0;
     return ['totaal' => $totaal_taken, 'voltooid' => $voltooide_taken, 'onvoltooid' => $onvoltooide_taken, 'hoog' => $hoog];
 }
+
+function prestatie() {
+    $counts = taken_tellen();
+    $voltooide_taken = isset($counts['voltooid']) ? (int)$counts['voltooid'] : 0;
+    if ($voltooide_taken > "80%") {
+        return 'Je bent geweldig bezig!';
+    } else if ($voltooide_taken > "60%") {
+        return 'Je bent goed op weg!';
+    } else if ($voltooide_taken > "40%") {
+        return 'Het kan beter gaan...';
+    } else if ($voltooide_taken > "20%") {
+        return 'Je hebt nog veel te doen!';
+    } else {
+        return 'Je moet taken afronden!';
+    }
+}
 ?>
