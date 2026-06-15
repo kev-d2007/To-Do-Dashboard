@@ -41,7 +41,7 @@
     </aside>
 
 <?php
-    $allowed_pages = ['dashboard.php','stats.php','settings.php'];
+    $allowed_pages = ['dashboard.php','stats.php','settings.php','alle_taken.php'];
     $page = 'dashboard.php';
     if (isset($_GET['page']) && in_array($_GET['page'], $allowed_pages)) {
         $page = $_GET['page'];

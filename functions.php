@@ -127,22 +127,24 @@ function taken_tellen($user_id = null) {
         "SELECT 
             COUNT(*) AS totaal_taken,
             SUM(afgerond = 1) AS voltooide_taken,
-            SUM(afgerond = 0) AS onvoltooide_taken
+            SUM(afgerond = 0) AS onvoltooide_taken,
+            SUM(prioriteit = 1 AND afgerond = 0) AS hoog
         FROM taken
         WHERE user_id = ?"
     );
-    if (!$stmt) return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0];
+    if (!$stmt) return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0, 'hoog' => 0];
     $stmt->bind_param('i', $user_id);
     $stmt->execute();
     $res = $stmt->get_result();
     $data = $res ? $res->fetch_assoc() : null;
     $stmt->close();
 
-    if (!$data) return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0];
+    if (!$data) return ['totaal' => 0, 'voltooid' => 0, 'onvoltooid' => 0, 'hoog' => 0];
 
     $totaal_taken = isset($data['totaal_taken']) ? (int)$data['totaal_taken'] : 0;
     $voltooide_taken = isset($data['voltooide_taken']) ? (int)$data['voltooide_taken'] : 0;
     $onvoltooide_taken = isset($data['onvoltooide_taken']) ? (int)$data['onvoltooide_taken'] : 0;
-    return ['totaal' => $totaal_taken, 'voltooid' => $voltooide_taken, 'onvoltooid' => $onvoltooide_taken];
+    $hoog = isset($data['hoog']) ? (int)$data['hoog'] : 0;
+    return ['totaal' => $totaal_taken, 'voltooid' => $voltooide_taken, 'onvoltooid' => $onvoltooide_taken, 'hoog' => $hoog];
 }
 ?>

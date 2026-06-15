@@ -74,6 +74,7 @@ body{
 
 .left-panel{
     width:460px;
+    display:block;
 }
 
 .right-panel{
@@ -85,15 +86,18 @@ body{
     background:white;
     border-radius:10px;
     padding:15px 18px;
+    padding-right:62px;
     margin-bottom:10px;
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     gap:10px;
     box-shadow:0 2px 5px rgba(0,0,0,.1);
+    position:relative;
+    box-sizing:border-box;
 }
 
 .task-card span{
-    flex:1;
+    flex:1 1 auto;
     font-weight:600;
 }
 
@@ -122,16 +126,19 @@ body{
 }
 
 .badge{
-    width:25px;
-    height:25px;
-    border-radius:5px;
+    width:36px;
+    height:36px;
+    border-radius:6px;
     background:#e74c3c;
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:12px;
+    font-size:14px;
     font-weight:bold;
+    position:absolute;
+    bottom:12px;
+    right:12px;
 }
 
 .badge.orange{
@@ -260,6 +267,34 @@ body{
     margin-top:10px;
     color:#4a90e2;
     font-size:13px;
+}
+
+@media (min-width: 700px) {
+    .task-list{
+        display:grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:12px;
+    }
+}
+
+@media (max-width: 699px){
+    .task-list{display:flex;flex-direction:column;gap:10px}
+    .left-panel{grid-template-columns: 1fr}
+}
+
+.left-panel .task-card,
+.task-list .task-card{
+    width:100%;
+}
+
+.left-panel .all-tasks-link{
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top:6px;
+}
+
+@media (min-width: 700px) {
+    .tasks-left { display:flex; justify-content:left; }    .task-list { max-width: 1150px; width:100%; box-sizing:border-box; }
 }
 
 .show-more-btn{
@@ -405,7 +440,6 @@ body{
     gap:30px;
 }
 
-/* Toast notification */
 #toast-container{
     position:fixed;
     top:20px;
@@ -458,7 +492,7 @@ body{
     margin-top:15px;
 }
 
-/* LOGIN PAGE */
+/* login pagina */
 
 body:has(.login-container){
     margin:0;
@@ -724,7 +758,7 @@ body:has(.login-container)::before{
     width:100%;
 }
 
-/* RESET PASSWORD PAGE */
+/* Wachtwoord reset pagina */
 
 .reset-page{
     width:100vw;
@@ -751,7 +785,7 @@ body:has(.login-container)::before{
 }
 
 .logo_reset_container{
-     width:60px;
+    width:60px;
 }
 
 .reset-title h2{

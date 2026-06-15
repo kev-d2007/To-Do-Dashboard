@@ -59,9 +59,10 @@
         } else {
             echo '<p>Geen gebruiker ingelogd.</p>';
         }
+        $counts = taken_tellen();
         ?>
 
-        <a href="#" class="all-tasks-link">alle taken</a>
+        <button type="button" onclick="loadPage('alle_taken.php', this)" class="all-tasks-link">alle taken</button>
 
     </div>
 
@@ -79,18 +80,18 @@
                 </div>
 
                 <div class="aangemaakt-box">
-                    <span class="number"><?php echo htmlspecialchars($counts['aangemaakt'] ?? 0); ?></span>
-                    <span>Aangemaakt</span>
+                    <span class="number"><?php echo htmlspecialchars($counts['hoog'] ?? 0); ?></span>
+                    <span>Onvoltooide taken met hoge prioriteit</span>
                 </div>
 
             </div>
 
             <div class="progress-bar">
-                <div class="progress-fill"></div>
+                <div class="progress-fill" style="width: <?php echo isset($counts['voltooid']) && isset($counts['onvoltooid']) ? ($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100 : 0; ?>%;"></div>
             </div>
 
-            <p>70% van de dagtaken zijn voltooid</p>
-            <p>30% van de dagtaken zijn aangemaakt</p>
+            <p><?php echo isset($counts['voltooid']) && isset($counts['onvoltooid']) ? round(($counts['voltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0; ?>% van de taken zijn voltooid</p>
+            <p><?php echo isset($counts['onvoltooid']) && isset($counts['voltooid']) ? round(($counts['onvoltooid'] / ($counts['voltooid'] + $counts['onvoltooid'])) * 100, 2) : 0; ?>% van de taken zijn onvoltooid</p>
 
         </div>
 
@@ -120,11 +121,8 @@
         <span>Gemiddeld voltooid</span>
         <strong>82%</strong>
         </div>
-
         </div>
-
     </div>
-
-        
-
 </div>
+
+<!-- no inline script needed here; menu.php provides loadPage() -->
