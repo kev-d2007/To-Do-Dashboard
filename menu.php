@@ -29,6 +29,11 @@
 
     <a class="category-title">Categorieën</a>
 
+    <button type="button" class="menu-btn" data-page="alle_taken.php" onclick="loadPage('alle_taken.php', this)">
+    <i class="fa-regular fa-envelope"></i>
+    Alle taken
+    </button>
+
     
     <div class="logout-section">
     <button class="menu-btn" onclick="logout()">
