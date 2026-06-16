@@ -18,14 +18,14 @@
         <?php $display_name = isset($_SESSION['username']) && $_SESSION['username'] !== '' ? $_SESSION['username'] : 'Gebruiker'; ?>
         <p style="color: #d9dadc;">Welkom terug, <strong style="color: #fc2121; font: bold;"><?php echo htmlspecialchars($display_name); ?></strong></p>
     </div>
-    <button type="button" class="menu-btn" data-page="dashboard.php" onclick="loadPage('dashboard.php', this)">
-    <i class="fa-solid fa-table-columns"></i> Dashboard </button>
+    <a class="menu-btn" href="menu.php?page=dashboard.php" data-page="dashboard.php" onclick="loadPage('dashboard.php', this)">
+    <i class="fa-solid fa-table-columns"></i> Dashboard </a>
 
-    <button type="button" class="menu-btn" data-page="stats.php" onclick="loadPage('stats.php', this)">
-    <i class="fa-solid fa-chart-simple"></i> Statistieken</button>
+    <a class="menu-btn" href="menu.php?page=stats.php" data-page="stats.php" onclick="loadPage('stats.php', this)">
+    <i class="fa-solid fa-chart-simple"></i> Statistieken</a>
 
-    <button type="button" class="menu-btn" data-page="settings.php" onclick="loadPage('settings.php', this)">
-    <i class="fa-solid fa-gear"></i> Instellingen</button>
+    <a class="menu-btn" href="menu.php?page=settings.php" data-page="settings.php" onclick="loadPage('settings.php', this)">
+    <i class="fa-solid fa-gear"></i> Instellingen</a>
 
     <a class="category-title">Categorieën</a>
 
@@ -130,6 +130,23 @@ function showToast(message){
     }, 3000);
 }
 
+function insertTaskIntoLeftPanel(t){
+    if(!t) return false;
+    var prioClass = t.prioriteit == 1 ? 'priority-high' : (t.prioriteit == 2 ? 'priority-medium' : 'priority-low');
+    var left = document.querySelector('.left-panel') || (document.getElementById('content') ? document.getElementById('content').querySelector('.left-panel') : null);
+    if(!left) return false;
+    var newCard = document.createElement('div');
+    newCard.className = 'task-card ' + prioClass;
+    newCard.innerHTML = '<input type="checkbox" class="task-complete" data-id="' + t.id + '" />'
+        + '<div class="task-main"><span>' + escapeHtml(t.titel) + '</span></div>'
+        + '<button class="task-delete" data-id="' + t.id + '" title="Verwijder taak"><i class="fa-solid fa-trash"></i></button>'
+        + '<div class="badge ' + prioClass + '">' + t.prioriteit + '</div>';
+    var allLink = left.querySelector('.all-tasks-link');
+    if (allLink) left.insertBefore(newCard, allLink);
+    else left.appendChild(newCard);
+    return true;
+}
+
 document.addEventListener('change', function(e){
     var target = e.target;
     if (!target) return;
@@ -149,9 +166,7 @@ document.addEventListener('change', function(e){
             } else {
                 if(val === 1){
                     showToast('Taak afgerond');
-                    // na verdwijnen toast verwijderen we de voltooide taak en vullen we aan
                     setTimeout(function(){
-                        // verwijder de taakkaart
                         var card = checkbox.closest('.task-card');
                         if (card && card.parentNode) card.parentNode.removeChild(card);
 
@@ -166,17 +181,7 @@ document.addEventListener('change', function(e){
                         }).then(function(res){ return res.json(); })
                         .then(function(resp){
                             if(resp && resp.success && resp.task){
-                                var t = resp.task;
-                                var prioClass = t.prioriteit == 1 ? 'priority-high' : (t.prioriteit == 2 ? 'priority-medium' : 'priority-low');
-                                var newCard = document.createElement('div');
-                                newCard.className = 'task-card ' + prioClass;
-                                newCard.innerHTML = '<input type="checkbox" class="task-complete" data-id="' + t.id + '" />'
-                                    + '<span>' + escapeHtml(t.titel) + '</span>'
-                                    + '<div class="badge ' + prioClass + '">' + t.prioriteit + '</div>';
-                                var left = document.querySelector('.left-panel');
-                                var allLink = left ? left.querySelector('.all-tasks-link') : null;
-                                if (allLink) left.insertBefore(newCard, allLink);
-                                else if (left) left.appendChild(newCard);
+                                insertTaskIntoLeftPanel(resp.task);
                             }
                         }).catch(function(){});
                     }, 3300);
@@ -217,6 +222,19 @@ document.addEventListener('click', function(e){
             showToast('Taak verwijderd');
             // notify pages to update counts/filters
             document.dispatchEvent(new CustomEvent('tasks-updated'));
+
+            // try to fetch a replacement task and insert it
+            var ids = Array.from(document.querySelectorAll('.task-card input[data-id]')).map(function(i){ return i.getAttribute('data-id'); });
+            fetch('volgende_taak.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ exclude: ids })
+            }).then(function(res){ return res.json(); })
+            .then(function(resp){
+                if(resp && resp.success && resp.task){
+                    insertTaskIntoLeftPanel(resp.task);
+                }
+            }).catch(function(){});
         } else {
             alert('Kon taak niet verwijderen.');
         }
@@ -230,6 +248,18 @@ function escapeHtml(str){
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 </script>
+
+<?php if (isset($_GET['error'])): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var err = '<?php echo htmlspecialchars($_GET['error']); ?>';
+    if (!err) return;
+    if (err === 'exists') showToast('Deze taak bestaat al.');
+    else if (err === 'empty') showToast('Voer een taaknaam in.');
+    else showToast('Fout: ' + err);
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>

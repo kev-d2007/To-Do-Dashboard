@@ -354,6 +354,7 @@ body{
     cursor:pointer;
     transition:.3s;
     display:block;
+    text-decoration: none;
 }
 
 .menu-btn i{
@@ -364,11 +365,13 @@ body{
 .menu-btn:hover{
     background:#1d3f5d;
     color:white;
+    text-decoration: none;
 }
 
 .menu-btn.active{
     background:#163856;
     color:white;
+    text-decoration: none;
 }
 
 .category-title{
