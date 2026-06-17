@@ -55,9 +55,13 @@ if (!function_exists('confirm_logged_in')) {
     function confirm_logged_in() {
     // tijdelijk uitgeschakeld zodat je direct naar menu.php kan
     // waarom doe je dit?
-    return true;
-}
+        if (!logged_in()) {
+            header("Location: login.php");
+            exit;
+        }
+        return true;
     }
+}
 
 if (!function_exists('login')) {
     function login($user_id = 0, $gebruiker = '', $email = '', $gemaakt_op = null) {

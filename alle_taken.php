@@ -16,7 +16,7 @@ confirm_logged_in();
 
     <div class="panel overview">
         <h3>Overzicht</h3>
-        <p>Onvoltooide: <strong id="count-open"><?php echo htmlspecialchars($counts['onvoltooide'] ?? 0); ?></strong></p>
+        <p>Onvoltooid: <strong id="count-open"><?php echo htmlspecialchars($counts['onvoltooid'] ?? 0); ?></strong></p>
         <p>Voltooid: <strong id="count-completed"><?php echo htmlspecialchars($counts['voltooid'] ?? 0); ?></strong></p>
     </div>
 </div>
