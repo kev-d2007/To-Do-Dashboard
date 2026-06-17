@@ -71,6 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit">Inloggen</button>
             </form>
             <button type="button" onclick="window.location.href='ww_reset.php'">Wachtwoord vergeten?</button>
+            <button type="button" onclick="window.location.href='registreren.php'" class="register-btn">
+            Account aanmaken
+            </button>
         </div>
     </div>
 </body>
